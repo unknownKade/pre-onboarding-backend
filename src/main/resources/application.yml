@@ -1,0 +1,6 @@
+spring:
+  profiles:
+    active: dev
+  messages:
+    basename: messages/error-messages
+    encoding: UTF-8
