@@ -1,7 +1,8 @@
 package com.wanted.preonboardingbackend.recruit.domain;
 
-import com.wanted.preonboardingbackend.company.domain.CompanyInfo;
 import com.wanted.preonboardingbackend.common.BaseEntity;
+import com.wanted.preonboardingbackend.company.domain.CompanyInfo;
+import com.wanted.preonboardingbackend.recruit.dto.RecruitCreateRequest;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,4 +33,12 @@ public class RecruitBoard extends BaseEntity {
 
     @Comment("채용보상금")
     int signingBonus;
+
+    public RecruitBoard(RecruitCreateRequest createRequest) {
+        companyInfo = CompanyInfo.create(createRequest.getCompanyId());
+        jobPosition = createRequest.getJobPosition();
+        jobDescription = createRequest.getJobDescription();
+        requiredSkills = createRequest.getRequiredSkills();
+        signingBonus = createRequest.getSigningBonus();
+    }
 }

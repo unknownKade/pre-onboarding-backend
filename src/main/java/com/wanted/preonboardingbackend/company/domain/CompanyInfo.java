@@ -2,12 +2,16 @@ package com.wanted.preonboardingbackend.company.domain;
 
 import com.wanted.preonboardingbackend.common.BaseEntity;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Entity
-public class CompanyInfo extends BaseEntity{
+public class CompanyInfo extends BaseEntity {
     @Id
     @Comment("회사_id")
     String companyId;
@@ -24,4 +28,12 @@ public class CompanyInfo extends BaseEntity{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="city_id")
     City city;
+
+    public CompanyInfo(String companyId){
+        this.companyId = companyId;
+    }
+
+    public static CompanyInfo create(String companyId){
+        return new CompanyInfo(companyId);
+    }
 }
