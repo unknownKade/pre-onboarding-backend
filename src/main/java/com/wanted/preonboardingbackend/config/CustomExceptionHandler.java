@@ -16,32 +16,37 @@ public class CustomExceptionHandler {
     @ExceptionHandler(DataException.DataNotFound.class)
     public ResponseEntity<String> handleDataNotFound(DataException.DataNotFound e){
         log.error("{} : {}", this.getClass().getSimpleName(),e.getMessage());
-        return ResponseEntity
-                .status(ErrorCode.NOT_FOUND.getStatus())
-                .body(ErrorCode.NOT_FOUND.getMessage());
+        return new ResponseEntity<>(
+                ErrorCode.NOT_FOUND.getMessage()
+                ,ErrorCode.NOT_FOUND.getStatus()
+                );
     }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<String> handleValidationError(MethodArgumentNotValidException e){
-        log.error("{} : {}", this.getClass().getSimpleName(),e.getBindingResult().getAllErrors().get(0).getDefaultMessage());
-        return ResponseEntity
-                .status(ErrorCode.NOT_ACCEPTABLE.getStatus())
-                .body(ErrorCode.NOT_ACCEPTABLE.getMessage());
+        log.error("{} : {}", this.getClass().getSimpleName(),e.getMessage());
+        return new ResponseEntity<>(
+                e.getBindingResult().getAllErrors().get(0).getDefaultMessage()
+                ,ErrorCode.NOT_ACCEPTABLE.getStatus()
+        );
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<String> handleDataIntegrityViolation(DataIntegrityViolationException e){
         log.error("{} : {}", e.getClass().getSimpleName(), e.getMessage());
-        return ResponseEntity
-                .status(ErrorCode.CONFLICT.getStatus())
-                .body(ErrorCode.CONFLICT.getMessage());
+        return new ResponseEntity<>(
+                ErrorCode.CONFLICT.getMessage()
+                ,ErrorCode.CONFLICT.getStatus()
+        );
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleException(Exception e){
         log.error("{} : {}", e.getClass().getSimpleName(), e.getMessage());
-        return ResponseEntity
-                .status(ErrorCode.INTERNAL_ERROR.getStatus())
-                .body(ErrorCode.INTERNAL_ERROR.getMessage());
+        return new ResponseEntity<>(
+                ErrorCode.INTERNAL_ERROR.getMessage()
+                ,ErrorCode.INTERNAL_ERROR.getStatus()
+        );
     }
 
 
