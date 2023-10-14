@@ -15,7 +15,7 @@ public class CustomExceptionHandler {
 
     @ExceptionHandler(DataException.DataNotFound.class)
     public ResponseEntity<String> handleDataNotFound(DataException.DataNotFound e){
-        log.error("{} : {}", this.getClass().getSimpleName(),e.getMessage());
+        log.error("{} : {}", e.getClass().getSimpleName(),e.getMessage());
         return new ResponseEntity<>(
                 ErrorCode.NOT_FOUND.getMessage()
                 ,ErrorCode.NOT_FOUND.getStatus()
@@ -24,7 +24,7 @@ public class CustomExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<String> handleValidationError(MethodArgumentNotValidException e){
-        log.error("{} : {}", this.getClass().getSimpleName(),e.getMessage());
+        log.error("{} : {}", e.getClass().getSimpleName(),e.getMessage());
         return new ResponseEntity<>(
                 e.getBindingResult().getAllErrors().get(0).getDefaultMessage()
                 ,ErrorCode.NOT_ACCEPTABLE.getStatus()
