@@ -10,7 +10,7 @@ import lombok.Getter;
 public class RecruitUpdateRequest {
     String jobPosition;
 
-    int signingBonus;
+    long signingBonus;
 
     String jobDescription;
 

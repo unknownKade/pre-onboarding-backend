@@ -33,7 +33,7 @@ public class RecruitBoard extends BaseEntity {
     String requiredSkills;
 
     @Comment("채용보상금")
-    int signingBonus;
+    long signingBonus;
 
     public RecruitBoard(RecruitCreateRequest createRequest) {
         companyInfo = CompanyInfo.create(createRequest.getCompanyId());

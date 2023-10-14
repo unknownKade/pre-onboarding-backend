@@ -10,7 +10,7 @@ public class RecruitCreateRequest {
     
     String jobPosition;
 
-    int signingBonus;
+    long signingBonus;
 
     String jobDescription;
 
