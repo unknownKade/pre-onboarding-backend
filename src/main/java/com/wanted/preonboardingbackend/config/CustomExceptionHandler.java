@@ -2,7 +2,7 @@ package com.wanted.preonboardingbackend.config;
 
 import lombok.extern.slf4j.Slf4j;
 import com.wanted.preonboardingbackend.common.ErrorCode;
-import com.wanted.preonboardingbackend.recruit.domain.RecruitException;
+import com.wanted.preonboardingbackend.common.DataException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class CustomExceptionHandler {
 
-    @ExceptionHandler(RecruitException.DataNotFound.class)
-    public ResponseEntity<String> handleDataNotFound(RecruitException.DataNotFound e){
+    @ExceptionHandler(DataException.DataNotFound.class)
+    public ResponseEntity<String> handleDataNotFound(DataException.DataNotFound e){
         log.error("{} : {}", this.getClass().getSimpleName(),e.getMessage());
         return ResponseEntity
                 .status(ErrorCode.NOT_FOUND.getStatus())

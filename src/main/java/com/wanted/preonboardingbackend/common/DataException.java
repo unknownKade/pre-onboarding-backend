@@ -1,8 +1,6 @@
-package com.wanted.preonboardingbackend.recruit.domain;
+package com.wanted.preonboardingbackend.common;
 
-import com.wanted.preonboardingbackend.common.BaseException;
-
-public class RecruitException {
+public class DataException {
     public static class DataNotFound extends BaseException{
         public DataNotFound(String message) {
             super(message);
