@@ -158,5 +158,27 @@ public class RecruitBoardControllerTest {
         ResponseEntity<Void> responseEntity = restTemplate.exchange(url, HttpMethod.PUT, new HttpEntity<>(request), Void.class);
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
+    @Nested
+    @DisplayName("채용공고 삭제")
+    class deleteRecruitBoard{
+        @DisplayName("성공")
+        @Test
+        public void success() {
+            String url = baseUrl + "/" + initTestItem();
+            restTemplate.delete(url);
+        }
 
+        @DisplayName("없는 ID")
+        @Test
+        public void noRecruitBoardId() {
+            String url = baseUrl + "/a";
+            ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.DELETE,null, String.class);
+
+            assertSoftly(softAssertions -> {
+                softAssertions.assertThat(responseEntity.getStatusCode()).isEqualTo(ErrorCode.NOT_FOUND.getStatus());
+                softAssertions.assertThat(responseEntity.getBody()).isEqualTo(ErrorCode.NOT_FOUND.getMessage());
+            });
+        }
+
+    }
 }

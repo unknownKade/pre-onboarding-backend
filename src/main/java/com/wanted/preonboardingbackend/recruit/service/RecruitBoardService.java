@@ -1,7 +1,7 @@
 package com.wanted.preonboardingbackend.recruit.service;
 
-import com.wanted.preonboardingbackend.recruit.domain.RecruitBoard;
 import com.wanted.preonboardingbackend.common.DataException;
+import com.wanted.preonboardingbackend.recruit.domain.RecruitBoard;
 import com.wanted.preonboardingbackend.recruit.dto.RecruitCreateRequest;
 import com.wanted.preonboardingbackend.recruit.dto.RecruitUpdateRequest;
 import com.wanted.preonboardingbackend.recruit.repository.RecruitBoardRepository;
@@ -24,5 +24,11 @@ public class RecruitBoardService {
         RecruitBoard recruitBoard = recruitBoardRepository.findById(recruitId)
                 .orElseThrow(() -> new DataException.DataNotFound(recruitId));
         recruitBoard.update(request);
+    }
+
+    public void deleteRecruit(String recruitId){
+        RecruitBoard recruitBoard = recruitBoardRepository.findById(recruitId)
+                .orElseThrow(() -> new DataException.DataNotFound(recruitId));
+        recruitBoardRepository.delete(recruitBoard);
     }
 }

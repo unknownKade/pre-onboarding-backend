@@ -23,4 +23,8 @@ public class RecruitBoardController {
         recruitBoardService.updateRecruit(recruitId, request);
     }
 
+    @DeleteMapping("/{recruitId}")
+    public void deleteRecruitBoard(@PathVariable String recruitId){
+        recruitBoardService.deleteRecruit(recruitId);
+    }
 }
