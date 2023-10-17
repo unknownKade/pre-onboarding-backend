@@ -1,8 +1,7 @@
-package com.wanted.preonboardingbackend.recruit;
+package com.wanted.preonboardingbackend.recruit.repository;
 
 import com.wanted.preonboardingbackend.recruit.domain.RecruitBoard;
 import com.wanted.preonboardingbackend.recruit.dto.RecruitCreateRequest;
-import com.wanted.preonboardingbackend.recruit.repository.RecruitBoardRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,7 @@ import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
-public class RecruitRepositoryTest {
+public class RecruitCreateTest {
     @Autowired
     RecruitBoardRepository recruitBoardRepository;
 

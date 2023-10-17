@@ -1,10 +1,12 @@
-package com.wanted.preonboardingbackend.recruit;
+package com.wanted.preonboardingbackend.recruit.controller;
 
 import com.wanted.preonboardingbackend.common.ErrorCode;
 import com.wanted.preonboardingbackend.company.domain.CompanyValidationMessage;
 import com.wanted.preonboardingbackend.recruit.domain.RecruitValidationMessage;
 import com.wanted.preonboardingbackend.recruit.dto.RecruitCreateRequest;
+import com.wanted.preonboardingbackend.recruit.dto.RecruitDetailsResponse;
 import com.wanted.preonboardingbackend.recruit.dto.RecruitUpdateRequest;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -15,6 +17,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestClientException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
@@ -158,6 +161,7 @@ public class RecruitBoardControllerTest {
         ResponseEntity<Void> responseEntity = restTemplate.exchange(url, HttpMethod.PUT, new HttpEntity<>(request), Void.class);
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
+
     @Nested
     @DisplayName("채용공고 삭제")
     class deleteRecruitBoard{
@@ -165,13 +169,17 @@ public class RecruitBoardControllerTest {
         @Test
         public void success() {
             String url = baseUrl + "/" + initTestItem();
+
             restTemplate.delete(url);
+
+            Assertions.assertThrows(RestClientException.class , () ->restTemplate.getForEntity(url, RecruitDetailsResponse.class));
         }
 
         @DisplayName("없는 ID")
         @Test
         public void noRecruitBoardId() {
             String url = baseUrl + "/a";
+
             ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.DELETE,null, String.class);
 
             assertSoftly(softAssertions -> {
