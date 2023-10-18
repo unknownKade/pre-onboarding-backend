@@ -5,6 +5,7 @@ import com.wanted.preonboardingbackend.recruit.dto.RecruitCreateRequest;
 import com.wanted.preonboardingbackend.recruit.dto.RecruitListResponse;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.criteria.*;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -44,6 +45,7 @@ public class RecruitReadTest {
         return recruitBoardRepository.save(new RecruitBoard(request));
     }
 
+    @DisplayName("채용공고 상세 조회")
     @Test
     public void findByRecruitId() {
         String recruitId = initializeTestData().getRecruitId();
@@ -62,6 +64,7 @@ public class RecruitReadTest {
         assertThat(result).isNotNull();
     }
 
+    @DisplayName("같은 회사 다른 채용공고 id 조회")
     @Test
     public void findAllByCompanyId(){
         String companyId = initializeTestData().getCompanyInfo().getCompanyId();
@@ -78,6 +81,24 @@ public class RecruitReadTest {
         result.forEach(System.out::println);
     }
 
+    @DisplayName("채용공고 목록 조회")
+    @Test
+    public void findAll() {
+        initializeTestData();
+
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<RecruitListResponse> cq = cb.createQuery(RecruitListResponse.class);
+        Root<RecruitBoard> recruitBoard = cq.from(RecruitBoard.class);
+
+        cq.select(cb.construct(RecruitListResponse.class,recruitBoard))
+                .orderBy(cb.desc(recruitBoard.get("updatedDate")));
+
+        List<RecruitListResponse> result = em.createQuery(cq).getResultList();
+
+        assertThat(result).isNotNull();
+    }
+
+    @DisplayName("채용공고 검색 조회")
     @Test
     public void findAllByKeyword(){
         initializeTestData();
@@ -89,17 +110,14 @@ public class RecruitReadTest {
         Root<RecruitBoard> recruitBoard = cq.from(RecruitBoard.class);
         List<Predicate> likeCriteria = new ArrayList<>();
 
-        cq.select(cb.construct(RecruitListResponse.class,recruitBoard));
+        likeCriteria.add(cb.like(recruitBoard.get("companyInfo").get("name"),parameter));
+        likeCriteria.add(cb.like(recruitBoard.get("jobPosition"),parameter));
+        likeCriteria.add(cb.like(recruitBoard.get("jobDescription"),parameter));
+        likeCriteria.add(cb.like(recruitBoard.get("requiredSkills"),parameter));
 
-        if(keyword != null && !keyword.isBlank()){
-            likeCriteria.add(cb.like(recruitBoard.get("companyInfo").get("name"),parameter));
-            likeCriteria.add(cb.like(recruitBoard.get("jobPosition"),parameter));
-            likeCriteria.add(cb.like(recruitBoard.get("jobDescription"),parameter));
-            likeCriteria.add(cb.like(recruitBoard.get("requiredSkills"),parameter));
-            cq.where(cb.or(likeCriteria.toArray(new Predicate[0])));
-        }
-
-        cq.orderBy(cb.desc(recruitBoard.get("updatedDate")));
+        cq.select(cb.construct(RecruitListResponse.class,recruitBoard))
+                .where(cb.or(likeCriteria.toArray(new Predicate[0])))
+                .orderBy(cb.desc(recruitBoard.get("updatedDate")));
 
         List<RecruitListResponse> result = em.createQuery(cq).getResultList();
 

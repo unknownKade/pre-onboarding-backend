@@ -16,7 +16,7 @@ public class RecruitCreateTest {
     @Autowired
     RecruitBoardRepository recruitBoardRepository;
 
-    @DisplayName("채용공고 등록 테스트")
+    @DisplayName("채용공고 등록")
     @Test
     public void createRecruit(){
         //given
@@ -49,7 +49,7 @@ public class RecruitCreateTest {
         });
     }
 
-    @DisplayName("글자 수 제한 초과")
+    @DisplayName("채용공고 글자 수 제한 초과")
     @Test
     public void createRecruitTooLongError(){
         RecruitCreateRequest recruitCreateRequest = new RecruitCreateRequest(
