@@ -1,6 +1,7 @@
 package com.wanted.preonboardingbackend.recruit.controller;
 
 import com.wanted.preonboardingbackend.recruit.dto.RecruitCreateRequest;
+import com.wanted.preonboardingbackend.recruit.dto.RecruitDetailsResponse;
 import com.wanted.preonboardingbackend.recruit.dto.RecruitUpdateRequest;
 import com.wanted.preonboardingbackend.recruit.service.RecruitBoardService;
 import jakarta.validation.Valid;
@@ -26,5 +27,10 @@ public class RecruitBoardController {
     @DeleteMapping("/{recruitId}")
     public void deleteRecruitBoard(@PathVariable String recruitId){
         recruitBoardService.deleteRecruit(recruitId);
+    }
+
+    @GetMapping("/{recruitId}")
+    public RecruitDetailsResponse readRecruitDetail(@PathVariable String recruitId){
+        return recruitBoardService.readRecruitDetail(recruitId);
     }
 }

@@ -187,6 +187,36 @@ public class RecruitBoardControllerTest {
                 softAssertions.assertThat(responseEntity.getBody()).isEqualTo(ErrorCode.NOT_FOUND.getMessage());
             });
         }
-
     }
+
+    @Nested
+    @DisplayName("채용공고 상세 조회")
+    class readRecruitDetail{
+        @DisplayName("성공")
+        @Test
+        public void success(){
+            String url = baseUrl + "/" + initTestItem();
+
+            ResponseEntity<RecruitDetailsResponse> responseEntity = restTemplate.getForEntity(url, RecruitDetailsResponse.class);
+
+            assertSoftly(softAssertions -> {
+                softAssertions.assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+                softAssertions.assertThat(responseEntity.getBody()).isNotNull();
+            });
+        }
+
+        @DisplayName("없는 ID")
+        @Test
+        public void noRecruitBoardId(){
+            String url = baseUrl + "/a";
+
+            ResponseEntity<String> responseEntity = restTemplate.getForEntity(url, String.class);
+
+            assertSoftly(softAssertions -> {
+                softAssertions.assertThat(responseEntity.getStatusCode()).isEqualTo(ErrorCode.NOT_FOUND.getStatus());
+                softAssertions.assertThat(responseEntity.getBody()).isEqualTo(ErrorCode.NOT_FOUND.getMessage());
+            });
+        }
+    }
+
 }

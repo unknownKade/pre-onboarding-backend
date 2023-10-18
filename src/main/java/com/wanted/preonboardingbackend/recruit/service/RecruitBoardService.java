@@ -3,6 +3,7 @@ package com.wanted.preonboardingbackend.recruit.service;
 import com.wanted.preonboardingbackend.common.DataException;
 import com.wanted.preonboardingbackend.recruit.domain.RecruitBoard;
 import com.wanted.preonboardingbackend.recruit.dto.RecruitCreateRequest;
+import com.wanted.preonboardingbackend.recruit.dto.RecruitDetailsResponse;
 import com.wanted.preonboardingbackend.recruit.dto.RecruitUpdateRequest;
 import com.wanted.preonboardingbackend.recruit.repository.RecruitBoardRepository;
 import lombok.RequiredArgsConstructor;
@@ -30,5 +31,9 @@ public class RecruitBoardService {
         RecruitBoard recruitBoard = recruitBoardRepository.findById(recruitId)
                 .orElseThrow(() -> new DataException.DataNotFound(recruitId));
         recruitBoardRepository.delete(recruitBoard);
+    }
+
+    public RecruitDetailsResponse readRecruitDetail(String recruitId){
+        return recruitBoardRepository.findByRecruitId(recruitId);
     }
 }

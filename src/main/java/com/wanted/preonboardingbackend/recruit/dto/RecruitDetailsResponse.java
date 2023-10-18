@@ -15,7 +15,7 @@ public class RecruitDetailsResponse {
 
     String country;
 
-    String region;
+    String city;
 
     String jobPosition;
 
