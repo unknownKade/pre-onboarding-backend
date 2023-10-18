@@ -4,11 +4,14 @@ import com.wanted.preonboardingbackend.common.DataException;
 import com.wanted.preonboardingbackend.recruit.domain.RecruitBoard;
 import com.wanted.preonboardingbackend.recruit.dto.RecruitCreateRequest;
 import com.wanted.preonboardingbackend.recruit.dto.RecruitDetailsResponse;
+import com.wanted.preonboardingbackend.recruit.dto.RecruitListResponse;
 import com.wanted.preonboardingbackend.recruit.dto.RecruitUpdateRequest;
 import com.wanted.preonboardingbackend.recruit.repository.RecruitBoardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @Transactional
@@ -35,5 +38,9 @@ public class RecruitBoardService {
 
     public RecruitDetailsResponse readRecruitDetail(String recruitId){
         return recruitBoardRepository.findByRecruitId(recruitId);
+    }
+
+    public List<RecruitListResponse> readRecruitList(String keyword) {
+        return recruitBoardRepository.findAllByKeyword(keyword);
     }
 }

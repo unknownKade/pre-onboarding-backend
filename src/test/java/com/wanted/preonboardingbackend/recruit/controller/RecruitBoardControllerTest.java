@@ -19,6 +19,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestClientException;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
@@ -219,4 +221,36 @@ public class RecruitBoardControllerTest {
         }
     }
 
+
+    @Nested
+    @DisplayName("채용공고 목록 조회")
+    class readRecruitList{
+        @DisplayName("전체 목록")
+        @Test
+        public void listAll(){
+            ResponseEntity<List> responseEntity = restTemplate.getForEntity(baseUrl, List.class);
+
+            assertSoftly(softAssertions -> {
+                softAssertions.assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+                softAssertions.assertThat(responseEntity.getBody()).isNotNull();
+            });
+        }
+
+        @DisplayName("검색 목록")
+        @Test
+        public void keyword(){
+            String keyword = "원티드";
+            String url = baseUrl + "?search=" + keyword;
+
+            ResponseEntity<List> responseEntity = restTemplate.getForEntity(url, List.class);
+
+            assertSoftly(softAssertions -> {
+                softAssertions.assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+                responseEntity.getBody()
+                        .forEach(response ->
+                                softAssertions.assertThat(response.toString()).contains(keyword)
+                        );
+            });
+        }
+    }
 }

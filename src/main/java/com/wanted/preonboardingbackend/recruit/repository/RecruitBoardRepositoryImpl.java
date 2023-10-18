@@ -3,11 +3,13 @@ package com.wanted.preonboardingbackend.recruit.repository;
 import com.wanted.preonboardingbackend.common.DataException;
 import com.wanted.preonboardingbackend.recruit.domain.RecruitBoard;
 import com.wanted.preonboardingbackend.recruit.dto.RecruitDetailsResponse;
+import com.wanted.preonboardingbackend.recruit.dto.RecruitListResponse;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.criteria.*;
 import lombok.RequiredArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,6 +25,27 @@ public class RecruitBoardRepositoryImpl implements RecruitBoardCustomRepository{
         List<String> moreRecruit = getMoreRecruit(recruitBoard.getCompanyInfo().getCompanyId());
 
         return RecruitDetailsResponse.from(recruitBoard, moreRecruit);
+    }
+
+    @Override
+    public List<RecruitListResponse> findAllByKeyword(String keyword) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<RecruitListResponse> cq = cb.createQuery(RecruitListResponse.class);
+        Root<RecruitBoard> r = cq.from(RecruitBoard.class);
+        List<Predicate> likeCriteria = new ArrayList<>();
+
+        cq.select(cb.construct(RecruitListResponse.class,r));
+
+        if(keyword != null && !keyword.isBlank()){
+            keyword = '%' + keyword + '%';
+            likeCriteria.add(cb.like(r.get("companyInfo").get("name"),keyword));
+            likeCriteria.add(cb.like(r.get("jobPosition"),keyword));
+            likeCriteria.add(cb.like(r.get("jobDescription"),keyword));
+            likeCriteria.add(cb.like(r.get("requiredSkills"),keyword));
+            cq.where(cb.or(likeCriteria.toArray(new Predicate[0])));
+        }
+
+        return em.createQuery(cq).getResultList();
     }
 
     private Optional<RecruitBoard> getRecruitBoard(String recruitId){

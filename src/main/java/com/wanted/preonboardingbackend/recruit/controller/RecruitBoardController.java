@@ -2,11 +2,15 @@ package com.wanted.preonboardingbackend.recruit.controller;
 
 import com.wanted.preonboardingbackend.recruit.dto.RecruitCreateRequest;
 import com.wanted.preonboardingbackend.recruit.dto.RecruitDetailsResponse;
+import com.wanted.preonboardingbackend.recruit.dto.RecruitListResponse;
 import com.wanted.preonboardingbackend.recruit.dto.RecruitUpdateRequest;
 import com.wanted.preonboardingbackend.recruit.service.RecruitBoardService;
+import jakarta.annotation.Nullable;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @RequestMapping("/recruit/board")
@@ -32,5 +36,10 @@ public class RecruitBoardController {
     @GetMapping("/{recruitId}")
     public RecruitDetailsResponse readRecruitDetail(@PathVariable String recruitId){
         return recruitBoardService.readRecruitDetail(recruitId);
+    }
+
+    @GetMapping
+    public List<RecruitListResponse> readRecruitListDetail(@Nullable @RequestParam("search") String keyword){
+        return recruitBoardService.readRecruitList(keyword);
     }
 }
