@@ -2,16 +2,19 @@ package com.wanted.preonboardingbackend.recruit.repository;
 
 import com.wanted.preonboardingbackend.recruit.domain.RecruitBoard;
 import com.wanted.preonboardingbackend.recruit.dto.RecruitCreateRequest;
+import com.wanted.preonboardingbackend.recruit.dto.RecruitListResponse;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.criteria.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 @SpringBootTest
 public class RecruitReadTest {
@@ -40,7 +43,6 @@ public class RecruitReadTest {
 
         return recruitBoardRepository.save(new RecruitBoard(request));
     }
-
 
     @Test
     public void findByRecruitId() {
@@ -74,5 +76,35 @@ public class RecruitReadTest {
         List<String> result = em.createQuery(cq).getResultList();
 
         result.forEach(System.out::println);
+    }
+
+    @Test
+    public void findAllByKeyword(){
+        initializeTestData();
+        String keyword = "백엔드";
+        String parameter = "%" + keyword + "%";
+
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<RecruitListResponse> cq = cb.createQuery(RecruitListResponse.class);
+        Root<RecruitBoard> recruitBoard = cq.from(RecruitBoard.class);
+        List<Predicate> likeCriteria = new ArrayList<>();
+
+        cq.select(cb.construct(RecruitListResponse.class,recruitBoard));
+
+        if(keyword != null && !keyword.isBlank()){
+            likeCriteria.add(cb.like(recruitBoard.get("companyInfo").get("name"),parameter));
+            likeCriteria.add(cb.like(recruitBoard.get("jobPosition"),parameter));
+            likeCriteria.add(cb.like(recruitBoard.get("jobDescription"),parameter));
+            likeCriteria.add(cb.like(recruitBoard.get("requiredSkills"),parameter));
+            cq.where(cb.or(likeCriteria.toArray(new Predicate[0])));
+        }
+
+        cq.orderBy(cb.desc(recruitBoard.get("updatedDate")));
+
+        List<RecruitListResponse> result = em.createQuery(cq).getResultList();
+
+        assertSoftly(softAssertions -> {
+            result.forEach((response) -> softAssertions.assertThat(response.getJobPosition()).contains(keyword));
+        });
     }
 }
