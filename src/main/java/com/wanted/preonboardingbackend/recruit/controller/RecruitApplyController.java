@@ -4,11 +4,13 @@ import com.wanted.preonboardingbackend.recruit.dto.RecruitApplyRequest;
 import com.wanted.preonboardingbackend.recruit.service.RecruitApplyService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Transactional
 @RequiredArgsConstructor
 @RequestMapping("/recruit/apply")
 @RestController

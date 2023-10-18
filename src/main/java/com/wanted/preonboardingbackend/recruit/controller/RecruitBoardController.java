@@ -8,10 +8,12 @@ import com.wanted.preonboardingbackend.recruit.service.RecruitBoardService;
 import jakarta.annotation.Nullable;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Transactional
 @RequiredArgsConstructor
 @RequestMapping("/recruit/board")
 @RestController
@@ -33,11 +35,13 @@ public class RecruitBoardController {
         recruitBoardService.deleteRecruit(recruitId);
     }
 
+    @Transactional(readOnly = true)
     @GetMapping("/{recruitId}")
     public RecruitDetailsResponse readRecruitDetail(@PathVariable String recruitId){
         return recruitBoardService.readRecruitDetail(recruitId);
     }
 
+    @Transactional(readOnly = true)
     @GetMapping
     public List<RecruitListResponse> readRecruitListDetail(@Nullable @RequestParam("search") String keyword){
         return recruitBoardService.readRecruitList(keyword);
